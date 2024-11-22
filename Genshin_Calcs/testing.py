@@ -10,3 +10,4 @@ cd = 1.683
 skill = 8.517+(0.083*60)
 a = calc.calc_raw_damage(atk, dmg_, cr, cd, skill)
 print(calc.calc_real_damage(a, 90, 95, 0.4, 0.6))
+

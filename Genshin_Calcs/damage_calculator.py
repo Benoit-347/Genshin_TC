@@ -1,8 +1,8 @@
 def calc_atk(base_atk, atk_, falt_atk_buff=0):
     return base_atk*(1+atk_)+311+falt_atk_buff
 
-def calc_raw_damage(total_atk, dmg_, CR, CD, skill_multiplier):
-    damage = total_atk*(1+dmg_)*(1+CR*CD)*skill_multiplier
+def calc_raw_damage(total_atk, dmg_, CR, CD, skill_multiplier, react_multi = 0):
+    damage = total_atk*(1+dmg_)*(1+CR*CD)*skill_multiplier*(1+react_multi)
     return damage
 
 def calc_real_damage(damage, char_lev=90, enemy_level=95, res_shred=0, def_multi_shred=0, def_shred=0):
