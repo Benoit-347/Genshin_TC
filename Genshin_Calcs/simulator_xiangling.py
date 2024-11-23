@@ -1,13 +1,17 @@
 import damage_calculator as calc
-def calc_xiangling(atk, cr, cd):
-    return calc.calc_real_damage(calc.calc_raw_damage(atk, dmg_, cr, cd, skill, 1.5), 90, 90, 0.4, 0, 0)
+def calc_xiangling(atk, cr, cd, em, er_):
+    temp_dmg_ = dmg_ + er_/4
+    return calc.calc_real_damage(calc.calc_raw_damage(atk, temp_dmg_, cr, cd, skill, 1.5, em), 90, 90, 0.4, 0, 0)
 atk = 0
 er_ = 1
+em = 0
 ele_dmg_ = 0
 burst_dmg_ = 0
 dmg_ = ele_dmg_ + burst_dmg_
 cr = 0
 cd = 0
+res_shred = 0
+def_shred = 0
 skill = 0
 
 def get_intristic_stat():
@@ -41,36 +45,55 @@ def get_count(list):
         counted.append([i, list.count(i)])
     return counted
 
-def get_atk_roll_dmg(sim_atk, sim_cr, sim_cd, atk_roll):
+def get_atk_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, atk_roll):
     sim_atk += atk_roll
-    current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd)
+    current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd, sim_em, sim_er)
     print(current_damage)
     return current_damage
 
-def get_cr_roll_dmg(sim_atk, sim_cr, sim_cd, cr_roll):
+def get_cr_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er , cr_roll):
     sim_cr += cr_roll
-    current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd)
+    current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd, sim_em, sim_er)
     print(current_damage)
     return current_damage
 
-def get_cd_roll_dmg(sim_atk, sim_cr, sim_cd, cd_roll):
+def get_cd_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, cd_roll):
     sim_cd += cd_roll
-    current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd)
+    current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd, sim_em, sim_er)
     print(current_damage)
     return current_damage
+
+def get_em_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, em_roll):
+    sim_em += em_roll
+    current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd, sim_em, sim_er)
+    print(current_damage)
+    return current_damage
+
+
+def get_er_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, er_roll):
+    sim_er += er_roll
+    current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd, sim_em, sim_er)
+    print(current_damage)
+    return current_damage
+
 
 def get_optimal(total_rolls):
 
     #copying stats
     sim_atk = atk
-    sim_atk += calc.calc_atk(base_atk, 0)
+    sim_atk = calc.calc_atk(base_atk, 0)
+    sim_em = em
+    sim_er = er_
     sim_dmg_ = dmg_
     sim_cr = cr
     sim_cd = cd
+    sim_res_shred = res_shred
+    sim_def_shred = def_shred
 
     #putting stat for each roll 
     atk_roll = 0.04955
     er_roll = 0.05505
+    em_roll = 0
     cd_roll = 0.0661
     cr_roll = 0.03305
 
@@ -80,10 +103,12 @@ def get_optimal(total_rolls):
 
     for i in range(total_rolls):
 
-        atk_dmg = get_atk_roll_dmg(sim_atk, sim_cr, sim_cd, atk_roll)
-        cr_dmg = get_cr_roll_dmg(sim_atk, sim_cr, sim_cd, cr_roll)
-        cd_dmg = get_cd_roll_dmg(sim_atk, sim_cr, sim_cd, cd_roll)
-
+        atk_dmg = get_atk_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, atk_roll)
+        cr_dmg = get_cr_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, cr_roll)
+        cd_dmg = get_cd_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, cd_roll)
+        em_dmg = get_em_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, em_roll)
+        er_dmg = get_er_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, er_roll)
+        
         if cr_dmg > atk_dmg :
             current_best = "cr"
             temp = cr_dmg
@@ -108,4 +133,4 @@ def get_optimal(total_rolls):
 cr += 0.05
 cd += 0.5
 update_values_from_artifact_set()
-get_optimal(70)
+get_optimal(31)
