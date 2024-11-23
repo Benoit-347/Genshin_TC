@@ -81,13 +81,13 @@ def get_optimal(total_rolls):
     for i in range(total_rolls):
 
         atk_dmg = get_atk_roll_dmg(sim_atk, sim_cr, sim_cd, atk_roll)
-        atk_CM_list.append(round((atk_dmg/prev_atk_dmg-1)*100,2))
+        atk_CM_list.append(roundzatk_dmg/prev_atk_dmg)
         prev_atk_dmg = atk_dmg
         cr_dmg = get_cr_roll_dmg(sim_atk, sim_cr, sim_cd, cr_roll)
-        cr_CM_list.append(round((cr_dmg/prev_cr_dmg-1)*100,2))
+        cr_CM_list.append(cr_dmg/prev_cr_dmg)
         prev_cr_dmg = cr_dmg
         cd_dmg = get_cd_roll_dmg(sim_atk, sim_cr, sim_cd, cd_roll)
-        cd_CM_list.append(round((cd_dmg/prev_cd_dmg-1)*100,2))
+        cd_CM_list.append(cd_dmg/prev_cd_dmg)
         prev_cd_dmg = cd_dmg
 
         if cr_dmg > atk_dmg :
@@ -117,4 +117,4 @@ def get_optimal(total_rolls):
 cr += 0.05
 cd += 0.5
 update_values_from_artifact_set()
-get_optimal(40)
+get_optimal(70)
