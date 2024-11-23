@@ -149,8 +149,8 @@ def write_to_csv_cm(total_rolls, file_name):
     sim_em1 = sim_em = em
     sim_er1 = sim_er = er_
     sim_dmg_ = dmg_
-    sim_cr1 = sim_cr = cr
-    sim_cd1 = sim_cd = cd
+    sim_cr2 = sim_cr1 = sim_cr = cr
+    sim_cd2 = sim_cd1 = sim_cd = cd
     sim_res_shred = res_shred
     sim_def_shred = def_shred
 
@@ -161,24 +161,43 @@ def write_to_csv_cm(total_rolls, file_name):
     cd_roll = 0.0661
     cr_roll = 0.03305
 
+    prev_atk_dmg = prev_cr_dmg = prev_cd_dmg = prev_em_dmg = prev_er_dmg = calc_xiangling(sim_atk, sim_cr, sim_cd, sim_em, sim_er)
+    
     result = []
     for i in range(total_rolls):
         
         atk_dmg = get_atk_roll_dmg(sim_atk1, sim_cr, sim_cd, sim_em, sim_er, atk_roll)
-        sim_atk1+=atk_roll
-        cr_dmg = get_cr_roll_dmg(sim_atk, sim_cr1, sim_cd, sim_em, sim_er, cr_roll)
-        sim_cr1+=cr_roll
-        cd_dmg = get_cd_roll_dmg(sim_atk, sim_cr, sim_cd1, sim_em, sim_er, cd_roll)
-        sim_cd1+=cd_roll
+        cm_atk = round((atk_dmg/prev_atk_dmg-1)*100, 2)
+        prev_atk_dmg = atk_dmg
+        sim_atk1+=atk_roll*base_atk
+
+        cr_dmg = get_cr_roll_dmg(sim_atk, sim_cr1, sim_cd1, sim_em, sim_er, cr_roll)
+        cm_cr = round((cr_dmg/prev_cr_dmg-1)*100, 2)
+        prev_cr_dmg = cr_dmg
+        sim_cr1+=cr_roll/2
+        sim_cd1+=cd_roll/2
+
+        cd_dmg = get_cd_roll_dmg(sim_atk, sim_cr2, sim_cd2, sim_em, sim_er, cd_roll)
+        cm_cd = round((cd_dmg/prev_cd_dmg-1)*100, 2)
+        prev_cd_dmg = cd_dmg
+        sim_cd2+=cd_roll/2
+        sim_cr2+=cr_roll/2
+
         em_dmg = get_em_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em1, sim_er, em_roll)
+        cm_em = round((em_dmg/prev_em_dmg-1)*100, 2)
+        prev_em_dmg = em_dmg
         sim_em1+=em_roll
+
         er_dmg = get_er_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er1, er_roll)
+        cm_er = round((er_dmg/prev_er_dmg-1)*100, 2)
+        prev_er_dmg = er_dmg
         sim_er1+=er_roll
-        result.append([atk_dmg, cr_dmg, cd_dmg, em_dmg, er_dmg])
+
+        result.append([atk_dmg, cm_atk, cr_dmg, cm_cr, cd_dmg, cm_cd, em_dmg, cm_em, er_dmg, cm_er])
 
     with open(file_name, 'w') as file1:
         writer = csv.writer(file1)
-        writer.writerow(['atk_dmg','cd_dmg','cr_dmg','em_dmg','er_dmg'])
+        writer.writerow(['atk_dmg', 'atk_cm','cr_dmg', 'cr_cm','cd_dmg', 'cd_cm','em_dmg','em_cm','er_dmg','er_cm'])
         writer.writerows(result)
     os.startfile(file_name)
 #main
