@@ -5,19 +5,20 @@ def calc_xiangling(atk, cr, cd, em, er_):
     return calc.calc_real_damage(calc.calc_raw_damage(atk, dmg_, cr, cd, skill, 0.5, em), 90, 90, res_shred, 0, 0)
     
 def get_intrinsic_stat():
-    char_base_atk = 358.77
+    char_base_atk = 358.77 + 300
     ascention_ = 0.384      #cd
     passive_buff = 0.35    #atk
-    skill_ = 2.304 + 1.44
-    weapon_base_atk = 	565
-    weapon_secondary = 0.276
-    weapon_passive_1 = 0.32
-    weapon_passive_2 = 0
-    return char_base_atk+weapon_base_atk, ascention_, passive_buff, skill_, weapon_secondary, weapon_passive_1
+    skill_ = ((2.176 + 2.992 + 0.0144*200+1.5)*7 + 12*(2.304 + 1.44))/20 #actually 400 ig since CA is 2 hit
+    weapon_base_atk = 	741
+    weapon_secondary = 0.11
+    weapon_passive_1 = 0.2*1.75     #cd
+    weapon_passive_2 = 0.28*1.75    #atk%
+    return char_base_atk+weapon_base_atk, ascention_, passive_buff, skill_, weapon_secondary, weapon_passive_1, weapon_passive_2
 
 
 def update_values_from_artifact_set():
-    global atk_, ele_dmg_, cr
+    global atk_, ele_dmg_, cr, dmg_
+    dmg_ += 0.15
     cr += 0.4
     #main
     atk_ += 0.466
@@ -208,17 +209,17 @@ def write_to_csv_cm(total_rolls, file_name):
     os.startfile(file_name)
 #main
 
-base_atk, ascention, passive_buff, skill, weapon_secondary, weapon_passive = get_intrinsic_stat()
+base_atk, ascention, passive_buff, skill, weapon_secondary, weapon_passive, weapon_passive_2 = get_intrinsic_stat()
 
-atk_ = 0 + weapon_secondary + weapon_passive + passive_buff
-atk = 0
+atk_ = 0 +weapon_passive_2 + passive_buff +0.4
+atk = 0 
 er_ = 1 + weapon_secondary
 em = 0 + ascention
 ele_dmg_ = 0
 burst_dmg_ = 0
 dmg_ =  ele_dmg_ + burst_dmg_
-cr = 0.05
-cd = 0.5 + ascention
+cr = 0.05 + weapon_secondary
+cd = 0.5 + ascention + weapon_passive
 res_shred = 0 
 def_shred = 0
 skill = skill
@@ -227,4 +228,4 @@ update_values_from_artifact_set()
 update_buffs(bennet= 0, kazuha= 1, xilonen = 1, furina = 1)
 atk += calc.calc_atk(base_atk, atk_)
 get_optimal(33)
-write_to_csv_cm(40, "mauvika_off_field_stat_cumulative_increase.csv")
+#write_to_csv_cm(40, "mauvika_on_field_N_stat_cumulative_increase.csv")

@@ -2,7 +2,7 @@
 
 import damage_calculator as calc
 def calc_xiangling(atk, cr, cd, em, er_):
-    return calc.calc_real_damage(calc.calc_raw_damage(atk, dmg_, cr, cd, skill, 0.5, em), 90, 90, res_shred, 0, 0)
+    return calc.calc_real_damage(calc.calc_raw_damage(atk, dmg_, cr, cd, skill), 90, 90, res_shred, 0, 0)
     
 def get_intrinsic_stat():
     char_base_atk = 358.77
@@ -227,4 +227,4 @@ update_values_from_artifact_set()
 update_buffs(bennet= 0, kazuha= 1, xilonen = 1, furina = 1)
 atk += calc.calc_atk(base_atk, atk_)
 get_optimal(33)
-write_to_csv_cm(40, "mauvika_off_field_stat_cumulative_increase.csv")
+write_to_csv_cm(40, "mono_mauvika_off_field_stat_cumulative_increase.csv")
