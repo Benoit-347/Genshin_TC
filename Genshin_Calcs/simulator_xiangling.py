@@ -44,19 +44,16 @@ def get_count(list):
 def get_atk_roll_dmg(sim_atk, sim_cr, sim_cd, atk_roll):
     sim_atk += atk_roll
     current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd)
-    print(current_damage)
     return current_damage
 
 def get_cr_roll_dmg(sim_atk, sim_cr, sim_cd, cr_roll):
     sim_cr += cr_roll
     current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd)
-    print(current_damage)
     return current_damage
 
 def get_cd_roll_dmg(sim_atk, sim_cr, sim_cd, cd_roll):
     sim_cd += cd_roll
     current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd)
-    print(current_damage)
     return current_damage
 
 def get_optimal(total_rolls):
@@ -76,13 +73,22 @@ def get_optimal(total_rolls):
 
     rolls_list = [sim_atk, sim_dmg_, sim_cr, sim_cd]
     sim_list = []   #to hold the top stats during sim
-
+    prev_atk_dmg =prev_cd_dmg=prev_cr_dmg = calc_xiangling(sim_atk, sim_cr, sim_cd)
+    atk_CM_list = []
+    cd_CM_list = []
+    cr_CM_list = []
 
     for i in range(total_rolls):
 
         atk_dmg = get_atk_roll_dmg(sim_atk, sim_cr, sim_cd, atk_roll)
+        atk_CM_list.append(round((atk_dmg/prev_atk_dmg-1)*100,2))
+        prev_atk_dmg = atk_dmg
         cr_dmg = get_cr_roll_dmg(sim_atk, sim_cr, sim_cd, cr_roll)
+        cr_CM_list.append(round((cr_dmg/prev_cr_dmg-1)*100,2))
+        prev_cr_dmg = cr_dmg
         cd_dmg = get_cd_roll_dmg(sim_atk, sim_cr, sim_cd, cd_roll)
+        cd_CM_list.append(round((cd_dmg/prev_cd_dmg-1)*100,2))
+        prev_cd_dmg = cd_dmg
 
         if cr_dmg > atk_dmg :
             current_best = "cr"
@@ -101,6 +107,9 @@ def get_optimal(total_rolls):
             sim_atk += atk_roll
         sim_list.append(current_best)
     print(get_count(sim_list))
+    print(atk_CM_list)
+    print(cd_CM_list)
+    print(cr_CM_list)
             
 
 
@@ -108,4 +117,4 @@ def get_optimal(total_rolls):
 cr += 0.05
 cd += 0.5
 update_values_from_artifact_set()
-get_optimal(70)
+get_optimal(40)
