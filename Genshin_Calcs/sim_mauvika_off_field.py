@@ -2,26 +2,25 @@
 
 import damage_calculator as calc
 def calc_xiangling(atk, cr, cd, em, er_):
-    temp_dmg_ = dmg_ + er_/4
-    return calc.calc_real_damage(calc.calc_raw_damage(atk, temp_dmg_, cr, cd, skill, 0.5, em), 90, 90, res_shred, 0, 0)
+    return calc.calc_real_damage(calc.calc_raw_damage(atk, dmg_, cr, cd, skill, 0.5, em), 90, 90, res_shred, 0, 0)
     
 def get_intrinsic_stat():
-    char_base_atk = 225.14
-    ascention_ = 96
-    passive_buff = 0.15    #pyro res shred = 0.15
-    skill_ = 2.016
-    weapon_base_atk = 	510
-    weapon_secondary = 0.459
+    char_base_atk = 358.77
+    ascention_ = 0.384      #cd
+    passive_buff = 0.35    #atk
+    skill_ = 2.304 + 1.44
+    weapon_base_atk = 	565
+    weapon_secondary = 0.276
     weapon_passive_1 = 0.32
-    weapon_passive_2 = 0.12
-    return char_base_atk+weapon_base_atk, ascention_, passive_buff, skill_, weapon_secondary, weapon_passive_1, weapon_passive_2
+    weapon_passive_2 = 0
+    return char_base_atk+weapon_base_atk, ascention_, passive_buff, skill_, weapon_secondary, weapon_passive_1
 
 
 def update_values_from_artifact_set():
-    global er_, ele_dmg_, cr
-    er_ += 0.2
+    global atk_, ele_dmg_, cr
+    cr += 0.4
     #main
-    er_ += 0.518
+    atk_ += 0.466
     #gob
     ele_dmg_ += 0.466
     #circlet
@@ -139,6 +138,7 @@ def get_optimal(total_rolls):
         else:
             sim_er += er_roll
         sim_list.append(current_best)
+    
     print(sim_cr)
     print(f"Max damage in sim: {temp}")
     print(get_count(sim_list))
@@ -204,18 +204,18 @@ def write_to_csv_cm(total_rolls, file_name):
     os.startfile(file_name)
 #main
 
-base_atk, ascention, passive_buff, skill, weapon_secondary, dmg_, cr = get_intrinsic_stat()
+base_atk, ascention, passive_buff, skill, weapon_secondary, weapon_passive = get_intrinsic_stat()
 
-atk_ = 0
+atk_ = 0 + weapon_secondary + weapon_passive + passive_buff
 atk = 0
 er_ = 1 + weapon_secondary
 em = 0 + ascention
 ele_dmg_ = 0
 burst_dmg_ = 0
-dmg_ = dmg_ + ele_dmg_ + burst_dmg_
-cr = cr + 0.05
-cd = 0.5
-res_shred = 0 + passive_buff
+dmg_ =  ele_dmg_ + burst_dmg_
+cr = 0.05
+cd = 0.5 + ascention
+res_shred = 0 
 def_shred = 0
 skill = skill
 
@@ -223,4 +223,4 @@ update_values_from_artifact_set()
 update_buffs(bennet= 1, kazuha= 1)
 atk += calc.calc_atk(base_atk, atk_)
 get_optimal(33)
-write_to_csv_cm(40, "xiangling_stat_cumulative_increase.csv")
+write_to_csv_cm(40, "mauvika_off_field_stat_cumulative_increase.csv")
