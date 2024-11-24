@@ -2,23 +2,22 @@
 
 import damage_calculator as calc
 def calc_xiangling(atk, cr, cd, em, er_):
-    return calc.calc_real_damage(calc.calc_raw_damage(atk, dmg_, cr, cd, skill, 0.5, em), 90, 90, res_shred, 0, 0)
+    return calc.calc_real_damage(calc.calc_raw_damage(atk, dmg_, cr, cd, skill, elemental_multiplier, em), 90, 90, res_shred, 0, 0)
     
 def get_intrinsic_stat():
-    char_base_atk = 358.77 + 300
+    char_base_atk = 358.77
     ascention_ = 0.384      #cd
     passive_buff = 0.35    #atk
-    skill_ = ((2.176 + 2.992 + 0.0144*200+1.5)*7 + 12*(2.304 + 1.44))/20 #actually 400 ig since CA is 2 hit
-    weapon_base_atk = 	741
-    weapon_secondary = 0.11
-    weapon_passive_1 = 0.2*1.75     #cd
-    weapon_passive_2 = 0.28*1.75    #atk%
-    return char_base_atk+weapon_base_atk, ascention_, passive_buff, skill_, weapon_secondary, weapon_passive_1, weapon_passive_2
+    skill_ = ((2.304 + 1.44)*7 + 8.0064 + 5.76)/15
+    weapon_base_atk = 	565
+    weapon_secondary = 0.276
+    weapon_passive_1 = 0.32
+    weapon_passive_2 = 0
+    return char_base_atk+weapon_base_atk, ascention_, passive_buff, skill_, weapon_secondary, weapon_passive_1
 
 
 def update_values_from_artifact_set():
-    global atk_, ele_dmg_, cr, dmg_
-    dmg_ += 0.15
+    global atk_, ele_dmg_, cr
     cr += 0.4
     #main
     atk_ += 0.466
@@ -46,8 +45,46 @@ def update_buffs(bennet= 0, kazuha= 0, xilonen= 0, candace= 0, furina = 0):
 
     if furina:
         dmg_ += 0.30
-
+        em += 160
         
+
+def gameplay_type(on_field = 0, vap = 0):
+    global g_type, elemental_multiplier
+    g_type = 0
+    if vap:
+        elemental_multiplier = 0.5
+    else:
+        elemental_multiplier = 0
+    if on_field:
+        global skill, dmg_
+        skill += ((2.176 + 2.992 + 0.0144*200+1.5)*7 - (2.304 + 1.44)*7)/15
+        dmg_ += 0.15 + 0.38
+        g_type = 1
+
+
+def cons(con):
+    if con > 0:
+        global atk_
+        atk_ += 0.40
+
+    if con > 1:
+        global base_atk
+        base_atk += 300
+        if g_type:
+            global skill
+            skill += 1.5
+        else:
+            global def_shred
+            def_shred += 0.2
+
+def is_weapon(flag = 0):
+    if flag:
+        global base_atk, dmg_, atk_, cr, cd
+        atk_ += - weapon_secondary - weapon_passive + 0.28*1.75
+        base_atk += 146
+        cr += 0.11
+        cd += 0.2*1.75
+
 def get_count(list):
     set1 = set(list)
     counted = []
@@ -145,7 +182,7 @@ def get_optimal(total_rolls):
         sim_list.append(current_best)
     
     print(sim_cr)
-    print(f"Max damage in sim: {temp}")
+    print(f"Max damage in sim: {round(temp, 2)}")
     print(get_count(sim_list))
             
 def write_to_csv_cm(total_rolls, file_name):
@@ -209,23 +246,26 @@ def write_to_csv_cm(total_rolls, file_name):
     os.startfile(file_name)
 #main
 
-base_atk, ascention, passive_buff, skill, weapon_secondary, weapon_passive, weapon_passive_2 = get_intrinsic_stat()
+base_atk, ascention, passive_buff, skill, weapon_secondary, weapon_passive = get_intrinsic_stat()
 
-atk_ = 0 +weapon_passive_2 + passive_buff +0.4
-atk = 0 
-er_ = 1 + weapon_secondary
+atk_ = 0 + weapon_secondary + weapon_passive + passive_buff
+atk = 0
+er_ = 1 
 em = 0 + ascention
 ele_dmg_ = 0
 burst_dmg_ = 0
 dmg_ =  ele_dmg_ + burst_dmg_
-cr = 0.05 + weapon_secondary
-cd = 0.5 + ascention + weapon_passive
+cr = 0.05
+cd = 0.5 + ascention
 res_shred = 0 
 def_shred = 0
 skill = skill
 
 update_values_from_artifact_set()
-update_buffs(bennet= 0, kazuha= 1, xilonen = 1, furina = 1)
+update_buffs(bennet= 0, kazuha= 1, xilonen = 1, furina = 1, candace= 0)
+gameplay_type(on_field=1, vap= 1)
+cons(con = 2)
+is_weapon(0)
 atk += calc.calc_atk(base_atk, atk_)
 get_optimal(33)
-#write_to_csv_cm(40, "mauvika_on_field_N_stat_cumulative_increase.csv")
+#write_to_csv_cm(40, "mauvika_off_field_stat_cumulative_increase.csv")
