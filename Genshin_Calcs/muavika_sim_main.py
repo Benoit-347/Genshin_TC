@@ -1,4 +1,4 @@
-#need to add timer for buffs
+#need to add timer for buffs and vapability
 
 import damage_calculator as calc
 def calc_xiangling(atk, cr, cd, em, er_):
@@ -8,7 +8,7 @@ def get_intrinsic_stat():
     char_base_atk = 358.77
     ascention_ = 0.384      #cd
     passive_buff = 0.35    #atk
-    skill_ = ((2.304 + 1.44)*7 + 8.0064 + 5.76)/15
+    skill_ = ((2.304 + 5.76)*7 + 8.0064)/15
     weapon_base_atk = 	565
     weapon_secondary = 0.276
     weapon_passive_1 = 0.32
@@ -57,7 +57,7 @@ def gameplay_type(on_field = 0, vap = 0):
         elemental_multiplier = 0
     if on_field:
         global skill, dmg_
-        skill += ((2.176 + 2.992 + 0.0144*200+1.5)*7 - (2.304 + 1.44)*7)/15
+        skill += ((2.176 + 2.992 + 0.0144*200+1.5)*7 - (2.304 + 5.76)*7)/15
         dmg_ += 0.15 + 0.38
         g_type = 1
 
