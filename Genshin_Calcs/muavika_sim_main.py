@@ -1,4 +1,5 @@
 #need to add timer for buffs and vapability
+#type rotation  #calc damage for each sec then to hit  #add vap individually
 
 import damage_calculator as calc
 def calc_xiangling(atk, cr, cd, em, er_):
@@ -244,6 +245,9 @@ def write_to_csv_cm(total_rolls, file_name):
         writer.writerow(['atk_dmg', 'atk_cm','cr_dmg', 'cr_cm','cd_dmg', 'cd_cm','em_dmg','em_cm','er_dmg','er_cm'])
         writer.writerows(result)
     os.startfile(file_name)
+
+def get_rotaion_damage():
+    pass #read temp
 #main
 
 base_atk, ascention, passive_buff, skill, weapon_secondary, weapon_passive = get_intrinsic_stat()
