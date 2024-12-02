@@ -123,23 +123,13 @@ def rotation(atk, atk_, dmg_, cr, cd, elemental_multiplier, em):
     s_0 = "e"
     s_2 = "e"
     s_4 = "e"
-    s_6 = "evap"
-    s_8 = "evap"
-    s_10 = "qvap"
-    s_12 = "ca1"
-    s_12_5 = "ca2"
-    s_13 = "ca1"
-    s_13_5 = "ca2vap"
-    s_14 = "ca1"
-    s_14_5 = "ca2"
-    s_15 = "ca1vap"
-    s_15_5 = "ca2"
-    s_16 = "ca1"
-    s_16_5 = "ca2vap"
-    s_17 = "ca1"
-    s_17_5 = "ca2"
-    s_18 = "ca1vap"
-    s_18_5 = "ca2"
+    s_6 = "e"
+    s_8 = "e"
+    s_10 = "e"
+    s_12 = "e"
+    s_14 = "e"
+    s_16 = "e"
+    s_18 = "e"
     list_seconds = [s_0, s_0_5, s_1, s_1_5, s_2, s_2_5, s_3, s_3_5, s_4, s_4_5, s_5, s_5_5, s_6, s_6_5, s_7, s_7_5, s_8, s_8_5, s_9, s_9_5, s_10, s_10_5, s_11, s_11_5, s_12, s_12_5, s_13, s_13_5, s_14, s_14_5, s_15, s_15_5, s_16, s_16_5, s_17, s_17_5, s_18, s_18_5, s_19, s_19_5]
     dps_list = []
     dps = 0
@@ -147,7 +137,7 @@ def rotation(atk, atk_, dmg_, cr, cd, elemental_multiplier, em):
     sec = 0
     for i in list_seconds:
 
-        buff_atk, buff_atk_, buff_dmg_, buff_res_shred, buff_em = return_buffed_for_uptime(sec, atk, atk_, dmg_, res_shred, em, bennet_time_start=0, bennet_time_stop= 0, kazuha_time_start=5, kazuha_time_stop= 16, xilonen_time_start= 7, xilonen_time_stop=18, candace_time_start = 0, candace_time_stop = 0, furina_time_start=3, furina_time_stop=19)
+        buff_atk, buff_atk_, buff_dmg_, buff_res_shred, buff_em = return_buffed_for_uptime(sec, atk, atk_, dmg_, res_shred, em, bennet_time_start=0, bennet_time_stop= 0, kazuha_time_start=0, kazuha_time_stop= 0, xilonen_time_start= 7, xilonen_time_stop=18, candace_time_start = 8, candace_time_stop = 20, furina_time_start=0, furina_time_stop=0)
         total_atk = buff_atk + calc.calc_atk(base_atk, buff_atk_)
 
         if i == "na":
@@ -326,7 +316,7 @@ cd = 0.5 + ascention
 res_shred = 0 
 def_shred = 0
 fighting_spirit = 200
-e_skill = 2.304
+e_skill = 2.304 + 0.0288*fighting_spirit
 q_skill = 8.0064 
 ca_skill1 = 1.955 + 0.012*fighting_spirit
 ca_skill2 = 2.72 + 0.012*fighting_spirit
