@@ -76,7 +76,7 @@ def update_buff_uptime_temp(sec, buff_atk, buff_atk_, buff_dmg_, buff_res_shred,
     return buff_atk, buff_atk_, buff_dmg_, buff_res_shred, buff_em
         
 
-#Mav E, kaz EQ, Xil EQ, Furina EQ = 10s
+
 def rotation(atk, atk_, dmg_, cr, cd, elemental_multiplier, em):
     s_0 = "na"
     s_1 = "na"
@@ -100,7 +100,7 @@ def rotation(atk, atk_, dmg_, cr, cd, elemental_multiplier, em):
     s_19 = "na"
     s_20 = "na"
 
-
+#Mav E, kaz EQ, Xil EQ, Furina EQ = 10s
     s_0 = "e"
     s_2 = "e"
     s_4 = "e"
@@ -123,7 +123,7 @@ def rotation(atk, atk_, dmg_, cr, cd, elemental_multiplier, em):
     global e_skill, q_skill, ca_skill
     for i in list_seconds:
 
-        buff_atk, buff_atk_, buff_dmg_, buff_res_shred, buff_em = update_buff_uptime_temp(sec, atk, atk_, dmg_, res_shred, em, bennet_time_start=3, bennet_time_stop= 14, kazuha_time_start=0, kazuha_time_stop= 0, xilonen_time_start= 5, xilonen_time_stop=18, candace_time_start = 0, candace_time_stop = 0, furina_time_start=1, furina_time_stop=16)
+        buff_atk, buff_atk_, buff_dmg_, buff_res_shred, buff_em = update_buff_uptime_temp(sec, atk, atk_, dmg_, res_shred, em, bennet_time_start=0, bennet_time_stop= 0, kazuha_time_start=0, kazuha_time_stop= 21, xilonen_time_start= 0, xilonen_time_stop=21, candace_time_start = 0, candace_time_stop = 0, furina_time_start=0, furina_time_stop=21)
         total_atk = buff_atk + calc.calc_atk(base_atk, buff_atk_)
 
         if i == "na":
@@ -140,7 +140,7 @@ def rotation(atk, atk_, dmg_, cr, cd, elemental_multiplier, em):
         dps_list.append(dps)
         dpr += dps
         sec += 1
-    return dps_list, dps
+    return dps_list, dpr
 
 def gameplay_type(on_field = 0, vap = 0):
     global g_type, elemental_multiplier
@@ -150,8 +150,7 @@ def gameplay_type(on_field = 0, vap = 0):
     else:
         elemental_multiplier = 0
     if on_field:
-        global skill, dmg_
-        skill += ((2.176 + 2.992 + 0.0144*200+1.5)*7 - (2.304 + 5.76)*7)/15
+        global dmg_
         dmg_ += 0.15 + 0.38
         g_type = 1
 
@@ -268,7 +267,12 @@ def get_optimal(total_rolls):
         sim_list.append(current_best)
     
     print(sim_cr)
-    print(f"Max damage in sim: {round(temp, 2)}")
+    damge_list, total_damage = rotation(atk = sim_atk, atk_ = sim_atk_, dmg_ = dmg_, cr = sim_cr, cd = sim_cd, elemental_multiplier = 0.5, em = sim_em)
+    print(f"Max damage in sim: {round(total_damage, 2)}")
+    j = 0
+    for i in damge_list:
+        j+= 1
+        print(f"Max dps in sim: {j, round(i, 2)}")
     print(get_count(sim_list))
             
 def write_to_csv_cm(total_rolls, file_name):
