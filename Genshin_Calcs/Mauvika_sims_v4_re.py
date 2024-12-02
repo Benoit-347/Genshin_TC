@@ -243,18 +243,45 @@ def get_optimal(total_rolls):
         else:
             sim_er += er_roll
         sim_list.append(current_best)
-    
-    print(sim_cr)
-    damge_list, total_damage = rotation(atk = sim_atk, atk_ = sim_atk_, dmg_ = sim_dmg_, cr = sim_cr, cd = sim_cd, elemental_multiplier = 0.5, em = sim_em)
 
+    
+    print(f"\nOptimal rolls are: {get_count(sim_list)}\n\n----------------------")
+    return sim_list
+
+def get_rotation_damage(optimal_num):
+    sim_atk = atk
+    sim_atk_ = atk_
+    sim_em = em
+    sim_er = er_
+    sim_dmg_ = dmg_
+    sim_cr = cr
+    sim_cd = cd
+    sim_res_shred = res_shred
+    sim_def_shred = def_shred
+
+    atk_roll = 0.04955
+    er_roll = 0.05505
+    em_roll = 19.815
+    cd_roll = 0.0661
+    cr_roll = 0.03305
+
+    sim_list = get_optimal(optimal_num)
+
+    for i in sim_list:
+        if i == "cr":
+            sim_cr += cr_roll
+        elif i == "cd":
+            sim_cd += cd_roll
+        elif i == "em":
+            sim_em += em_roll
+        elif i == "atk":
+            sim_atk += atk_roll
+    damge_list, total_damage = rotation(atk = sim_atk, atk_ = sim_atk_, dmg_ = sim_dmg_, cr = sim_cr, cd = sim_cd, elemental_multiplier = 0.5, em = sim_em)
     j = 0
     for i in damge_list:
         j+= 1
-        print(f"Max dps in sim: {j, round(i, 2)}")
-    print(get_count(sim_list))
-    print(f"Max damage in sim: {round(total_damage, 2)}")
-    print(f"Max dps in sim: {round(total_damage/20, 2)}")
-
+        
+    print(f"\nMax dps: {round(total_damage/20)}\n")
 base_atk, ascention, passive_buff, skill, weapon_secondary, weapon_passive = get_intrinsic_stat()
 
 atk_ = 0 + weapon_secondary + weapon_passive + passive_buff
@@ -277,4 +304,4 @@ ca_skill2 = 2.992 + 0.0144*200
 update_values_from_artifact_set()
 cons(2)
 is_weapon(1)
-get_optimal(33)
+get_rotation_damage(optimal_num=33)
