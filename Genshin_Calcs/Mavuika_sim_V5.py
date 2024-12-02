@@ -337,5 +337,19 @@ is_weapon(1)
 x, y = get_rotation_damage(optimal_num=33)
 plt.figure(figsize=(20, 10))
 plt.plot(x, y)
+plt.title("Dps Graph")
+plt.grid()
+plt.show()
+def get_cm(y):
+    cm_list = []
+    cm = 0
+    for i in y:
+        cm += i
+        cm_list.append(cm)
+    return cm_list
+y = get_cm(y)
+plt.figure(figsize=(20, 10))
+plt.plot(x, y)
+plt.title("Cumulative Damage Graph")
 plt.grid()
 plt.show()
