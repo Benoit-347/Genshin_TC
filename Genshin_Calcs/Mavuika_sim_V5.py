@@ -1,4 +1,5 @@
 import damage_calculator as calc
+import matplotlib.pyplot as plt
 
 def calc_mauvika(atk,dmg_, cr, cd, skill, elemental_multiplier, em,res_shred, def_shred= 0):
     return calc.calc_real_damage(calc.calc_raw_damage(atk, dmg_, cr, cd, skill, elemental_multiplier, em), 90, 90, res_shred, def_shred, 0)
@@ -79,27 +80,45 @@ def return_buffed_for_uptime(sec, buff_atk, buff_atk_, buff_dmg_, buff_res_shred
 
 def rotation(atk, atk_, dmg_, cr, cd, elemental_multiplier, em):
     s_0 = "na"
+    s_0_5 = "na"
     s_1 = "na"
+    s_1_5 = "na"
     s_2 = "na"
+    s_2_5 = "na"
     s_3 = "na"
+    s_3_5 = "na"
     s_4 = "na"
+    s_4_5 = "na"
     s_5 = "na"
+    s_5_5 = "na"
     s_6 = "na"
+    s_6_5 = "na"
     s_7 = "na"
+    s_7_5 = "na"
     s_8 = "na"
+    s_8_5 = "na"
     s_9 = "na"
+    s_9_5 = "na"
     s_10 ="na"
+    s_10_5 = "na"
     s_11 = "na"
+    s_11_5 = "na"
     s_12 = "na"
+    s_12_5 = "na"
     s_13 = "na"
+    s_13_5 = "na"
     s_14 = "na"
+    s_14_5 = "na"
     s_15 = "na"
+    s_15_5 = "na"
     s_16 = "na"
+    s_16_5 = "na"
     s_17 = "na"
+    s_17_5 = "na"
     s_18 = "na"
+    s_18_5 = "na"
     s_19 = "na"
-    s_20 = "na"
-
+    s_19_5 = "na"
 #Mav E, Furina EQ, kaz EQ, Xil EQ, = 10s
     s_0 = "e"
     s_2 = "e"
@@ -121,10 +140,9 @@ def rotation(atk, atk_, dmg_, cr, cd, elemental_multiplier, em):
     s_17_5 = "ca2"
     s_18 = "ca1vap"
     s_18_5 = "ca2"
-    s_19 = "na"
-    s_20 = "na"
-    list_seconds = [s_0, s_1, s_2, s_3, s_4, s_5, s_6, s_7, s_8, s_9, s_10, s_11, s_12, s_12_5, s_13, s_13_5, s_14, s_14_5, s_15, s_15_5, s_16, s_16_5, s_17, s_18, s_19, s_20]
+    list_seconds = [s_0, s_0_5, s_1, s_1_5, s_2, s_2_5, s_3, s_3_5, s_4, s_4_5, s_5, s_5_5, s_6, s_6_5, s_7, s_7_5, s_8, s_8_5, s_9, s_9_5, s_10, s_10_5, s_11, s_11_5, s_12, s_12_5, s_13, s_13_5, s_14, s_14_5, s_15, s_15_5, s_16, s_16_5, s_17, s_17_5, s_18, s_18_5, s_19, s_19_5]
     dps_list = []
+    dps = 0
     dpr = 0
     sec = 0
     for i in list_seconds:
@@ -133,29 +151,34 @@ def rotation(atk, atk_, dmg_, cr, cd, elemental_multiplier, em):
         total_atk = buff_atk + calc.calc_atk(base_atk, buff_atk_)
 
         if i == "na":
+            sec += 0.5
             continue
         elif i == "e":
-            dps = calc_mauvika(total_atk, buff_dmg_, cr, cd, e_skill, 0, buff_em, buff_res_shred)
+            damage = calc_mauvika(total_atk, buff_dmg_, cr, cd, e_skill, 0, buff_em, buff_res_shred)
         elif i == "ca1":
-            dps = dps = calc_mauvika(total_atk, buff_dmg_, cr, cd, ca_skill1, 0, buff_em, buff_res_shred)
+            damage =  calc_mauvika(total_atk, buff_dmg_, cr, cd, ca_skill1, 0, buff_em, buff_res_shred)
         elif i == "ca2":
-            dps = dps = calc_mauvika(total_atk, buff_dmg_, cr, cd, ca_skill2, 0, buff_em, buff_res_shred)
+            damage =  calc_mauvika(total_atk, buff_dmg_, cr, cd, ca_skill2, 0, buff_em, buff_res_shred)
         elif i == "q":
-            dps = dps = calc_mauvika(total_atk, buff_dmg_+ 0.15 + 0.38, cr, cd, q_skill, 0, buff_em, buff_res_shred)
+            damage =  calc_mauvika(total_atk, buff_dmg_+ 0.15 + 0.38, cr, cd, q_skill, 0, buff_em, buff_res_shred)
         elif i == "evap":
-            dps = calc_mauvika(total_atk, buff_dmg_, cr, cd, e_skill, elemental_multiplier, buff_em, buff_res_shred)
+            damage = calc_mauvika(total_atk, buff_dmg_, cr, cd, e_skill, elemental_multiplier, buff_em, buff_res_shred)
         elif i == "ca1vap":
-            dps = dps = calc_mauvika(total_atk, buff_dmg_+ 0.15 + 0.38, cr, cd, ca_skill1, elemental_multiplier, buff_em, buff_res_shred)
+            damage =  calc_mauvika(total_atk, buff_dmg_+ 0.15 + 0.38, cr, cd, ca_skill1, elemental_multiplier, buff_em, buff_res_shred)
         elif i == "ca2vap":
-            dps = dps = calc_mauvika(total_atk, buff_dmg_+ 0.15 + 0.38, cr, cd, ca_skill2, elemental_multiplier, buff_em, buff_res_shred)
+            damage =  calc_mauvika(total_atk, buff_dmg_+ 0.15 + 0.38, cr, cd, ca_skill2, elemental_multiplier, buff_em, buff_res_shred)
         elif i == "qvap":
-            dps = dps = calc_mauvika(total_atk, buff_dmg_+ 0.15 + 0.38, cr, cd, q_skill, elemental_multiplier, buff_em, buff_res_shred)
+            damage =  calc_mauvika(total_atk, buff_dmg_+ 0.15 + 0.38, cr, cd, q_skill, elemental_multiplier, buff_em, buff_res_shred)
         else:
             print("\n\nunknown str encountered\n\n")
             break
-        dps_list.append(dps)
-        dpr += dps
-        sec += 1
+        dps += damage
+        if sec % 1 == 0:
+            dps_list.append([int(sec), round(dps)])
+            dps = 0
+        dpr += damage
+        sec += 0.5
+    print(sec)
     return dps_list, dpr
 
 def get_count(list):
@@ -279,11 +302,16 @@ def get_rotation_damage(optimal_num):
         elif i == "atk":
             sim_atk += atk_roll
     damge_list, total_damage = rotation(atk = sim_atk, atk_ = sim_atk_, dmg_ = sim_dmg_, cr = sim_cr, cd = sim_cd, elemental_multiplier = 0.5, em = sim_em)
-    j = 0
+   
+    x_list, y_list = [],[]
     for i in damge_list:
-        j+= 1
+        x_list.append(i[0])
+        y_list.append(i[1])
+
         
     print(f"\nMax dps: {round(total_damage/20)}\n")
+    return x_list, y_list
+
 base_atk, ascention, passive_buff, skill, weapon_secondary, weapon_passive = get_intrinsic_stat()
 
 atk_ = 0 + weapon_secondary + weapon_passive + passive_buff
@@ -305,5 +333,9 @@ ca_skill2 = 2.992 + 0.0144*fighting_spirit
 
 update_values_from_artifact_set()
 cons(2) #12.
-is_weapon(0)
-get_rotation_damage(optimal_num=33)
+is_weapon(1)
+x, y = get_rotation_damage(optimal_num=33)
+plt.figure(figsize=(20, 10))
+plt.plot(x, y)
+plt.grid()
+plt.show()
