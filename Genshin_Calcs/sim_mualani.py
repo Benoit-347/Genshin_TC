@@ -8,7 +8,7 @@ def get_intrinsic_stat():
     char_base_hp = 358.77
     ascention_ = 0.384      #cd
     passive_buff = 0.35    #atk
-    skill_ = ((2.304 + 1.44)*7 + 8.0064 + 5.76)/15
+    skill_ = ((2.304)*7 + 8.0064 + 5.76)/15
     weapon_secondary = 0.276
     weapon_passive_1 = 0.32
     weapon_passive_2 = 0
