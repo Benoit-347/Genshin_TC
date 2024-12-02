@@ -100,7 +100,7 @@ def rotation(atk, atk_, dmg_, cr, cd, elemental_multiplier, em):
     s_19 = "na"
     s_20 = "na"
 
-#Mav E, kaz EQ, Xil EQ, Furina EQ = 10s
+#Mav E, Furina EQ, kaz EQ, Xil EQ, = 10s
     s_0 = "e"
     s_2 = "e"
     s_4 = "e"
@@ -117,8 +117,10 @@ def rotation(atk, atk_, dmg_, cr, cd, elemental_multiplier, em):
     s_15_5 = "ca2"
     s_16 = "ca1"
     s_16_5 = "ca2vap"
-    s_17 = "e"
-    s_18 = "evap"
+    s_17 = "ca1"
+    s_17_5 = "ca2"
+    s_18 = "ca1vap"
+    s_18_5 = "ca2"
     s_19 = "na"
     s_20 = "na"
     list_seconds = [s_0, s_1, s_2, s_3, s_4, s_5, s_6, s_7, s_8, s_9, s_10, s_11, s_12, s_12_5, s_13, s_13_5, s_14, s_14_5, s_15, s_15_5, s_16, s_16_5, s_17, s_18, s_19, s_20]
@@ -127,7 +129,7 @@ def rotation(atk, atk_, dmg_, cr, cd, elemental_multiplier, em):
     sec = 0
     for i in list_seconds:
 
-        buff_atk, buff_atk_, buff_dmg_, buff_res_shred, buff_em = return_buffed_for_uptime(sec, atk, atk_, dmg_, res_shred, em, bennet_time_start=0, bennet_time_stop= 0, kazuha_time_start=0, kazuha_time_stop= 21, xilonen_time_start= 0, xilonen_time_stop=21, candace_time_start = 0, candace_time_stop = 0, furina_time_start=0, furina_time_stop=21)
+        buff_atk, buff_atk_, buff_dmg_, buff_res_shred, buff_em = return_buffed_for_uptime(sec, atk, atk_, dmg_, res_shred, em, bennet_time_start=0, bennet_time_stop= 0, kazuha_time_start=6, kazuha_time_stop= 16, xilonen_time_start= 8, xilonen_time_stop=19, candace_time_start = 0, candace_time_stop = 0, furina_time_start=4, furina_time_stop=19)
         total_atk = buff_atk + calc.calc_atk(base_atk, buff_atk_)
 
         if i == "na":
@@ -302,6 +304,6 @@ ca_skill1 = 2.176 + 0.0144*200
 ca_skill2 = 2.992 + 0.0144*200
 
 update_values_from_artifact_set()
-cons(2)
-is_weapon(1)
+cons(0) #12.
+is_weapon(0)
 get_rotation_damage(optimal_num=33)
