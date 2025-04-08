@@ -42,22 +42,22 @@ def return_buffed_for_uptime(sec, buff_hp, buff_hp_, buff_dmg_, buff_res_shred, 
 
 
 
-    if kazuha_time_start <= sec and sec <  kazuha_time_stop:
+    if kazuha_time_start <= sec and sec <=  kazuha_time_stop:
         buff_res_shred += 0.4
         buff_dmg_ += 0.58
         buff_em += 200
 
-    if xilonen_time_start <= sec and sec <  xilonen_time_stop:
+    if xilonen_time_start <= sec and sec <=  xilonen_time_stop:
         buff_res_shred += 0.36
         buff_dmg_ += 0.4
         buff_hp_ += 0.45
 
-    if candace_time_start <= sec and sec <  candace_time_stop:
+    if candace_time_start <= sec and sec <=  candace_time_stop:
         buff_dmg_ += 0.3
         buff_em += 120     
         buff_hp_ += 0.25
 
-    if furina_time_start <= sec and sec <  furina_time_stop:
+    if furina_time_start <= sec and sec <=  furina_time_stop:
         buff_dmg_ += 0.30
         buff_em += 104.55
         buff_hp_ += 0.25
@@ -107,33 +107,30 @@ def rotation(hp, hp_, dmg_, cr, cd, elemental_multiplier, em):
     s_19 = "na"
     s_19_5 = "na"
 #Mav E, Furina EQ, kaz EQ, Xil EQ, = 10s
-#Furina E       1s
-#Xilonen EN2Q   3s
-#Furina Q       2s
-#Mav E          2s
-#Bennet EQN1    2s
-#Xilonen EN2    2s
-#Mav Q8CA       6+2s
-#Total          20s
-    s_7 = "ena3_1"
-    s_9 = "ena3"
-    s_11 = "ena3"
-    s_13 = "q"
-    list_seconds = [s_0, s_0_5, s_1, s_1_5, s_2, s_2_5, s_3, s_3_5, s_4, s_4_5, s_5, s_5_5, s_6, s_6_5, s_7, s_7_5, s_8, s_8_5, s_9, s_9_5, s_10, s_10_5, s_11, s_11_5, s_12, s_12_5, s_13, s_13_5, s_14, s_14_5, s_15, s_15_5, s_16, s_16_5, s_17, s_17_5, s_18, s_18_5, s_19, s_19_5]
+#Mualani N1     1s
+#Xilonen EN2Q   3s      2s
+#Candace EQ     2s      5s  
+#Mav Q N1 E     3s      8s
+#Mualani E3*N3Q 7 + 3s  
+#Total          19s   
+    s_12 = "ena3_1"
+    s_14 = "ena3"
+    s_17 = "ena3"
+    s_19 = "q"
+    list_seconds = [s_0, s_0_5, s_1, s_1_5, s_2, s_2_5, s_3, s_3_5, s_4, s_4_5, s_5, s_5_5, s_6, s_6_5, s_7, s_7_5, s_8, s_8_5, s_9, s_9_5, s_10, s_10_5, s_11, s_11_5, s_12, s_12_5, s_13, s_13_5, s_14, s_14_5, s_15, s_15_5, s_16, s_16_5, s_17, s_17_5, s_18, s_18_5, s_19]
     dps_list = []
     dps = 0
     dpr = 0
     sec = 0
     for i in list_seconds:
-                                                                                                                                                            #Furina E       1s  0
-                                                                                                                                                            #Xilonen EN2Q   3s  2
-                                                                                                                                                            #Furina Q       2s  6
-                                                                                                                                                            #Mav E          2s  7
-                                                                                                                                                            #Bennet EQN1    2s  9
-                                                                                                                                                            #Xilonen EN2    2s  12
-                                                                                                                                                            #Mav Q8CA       6+2s 14, to 20
-                                                                                                                                                            #Total          20s
-        buff_hp, buff_hp_, buff_dmg_, buff_res_shred, buff_em = return_buffed_for_uptime(sec, hp, hp_, dmg_, res_shred, em, bennet_time_start=0, bennet_time_stop= 0, kazuha_time_start=0, kazuha_time_stop= 0, xilonen_time_start= 0, xilonen_time_stop=20, candace_time_start = 0, candace_time_stop = 20, furina_time_start=0, furina_time_stop=0)
+                                                                                                                                                                                                                                                    #Mualani N1     1s
+                                                                                                                                                                                                                                                    #Xilonen EN2Q   3s      2s
+                                                                                                                                                                                                                                                    #Candace EQ     2s      5s  
+                                                                                                                                                                                                                                                    #Mav Q N1 E     3s      8s
+                                                                                                                                                                                                                                                    #Mualani E3*N3Q 9 + 2s  12,14,17,19
+                                                                                                                                                                                                                                                    #Total          19s                                                                                                                                                                                                                                                
+
+        buff_hp, buff_hp_, buff_dmg_, buff_res_shred, buff_em = return_buffed_for_uptime(sec, hp, hp_, dmg_, res_shred, em, bennet_time_start=0, bennet_time_stop= 0, kazuha_time_start=0, kazuha_time_stop= 0, xilonen_time_start= 2, xilonen_time_stop=17, candace_time_start = 5, candace_time_stop = 15, furina_time_start=0, furina_time_stop=0)
         total_hp = buff_hp + char_base_hp + char_base_hp* buff_hp_
         
         if i == "na":

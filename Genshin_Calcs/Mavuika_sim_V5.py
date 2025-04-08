@@ -338,13 +338,13 @@ res_shred = 0
 def_shred = 0
 fighting_spirit = 200
 e_skill = 2.304
-q_skill = 8.0064 
+q_skill = 8.0064 + 0.029*fighting_spirit
 ca_skill1 = 1.955 + 0.012*fighting_spirit
 ca_skill2 = 2.72 + 0.012*fighting_spirit
 
 update_values_from_artifact_set()
 cons(0)
-is_weapon(1)
+is_weapon(0)
 plot = 0
 x, y = get_rotation_damage(optimal_num=33)
 #all graphs
