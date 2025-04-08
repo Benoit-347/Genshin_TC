@@ -52,13 +52,16 @@ def get_count(list):
     return counted
 
 def get_atk_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, atk_roll):
+
     sim_atk += atk_roll*base_atk
     current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd, sim_em, sim_er)
+
     return current_damage
 
 def get_cr_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er , cr_roll):
     sim_cr += cr_roll
     current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd, sim_em, sim_er)
+
     return current_damage
 
 def get_cd_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, cd_roll):
@@ -75,6 +78,7 @@ def get_em_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, em_roll):
 def get_er_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, er_roll):
     sim_er += er_roll
     current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd, sim_em, sim_er)
+
     return current_damage
 
 
@@ -98,7 +102,10 @@ def get_optimal(total_rolls):
     cr_roll = 0.03305
 
     sim_list = []   #to hold the top stats during sim
-
+    prev_atk_dmg =prev_cd_dmg=prev_cr_dmg = calc_xiangling(sim_atk, sim_cr, sim_cd)
+    atk_CM_list = []
+    cd_CM_list = []
+    cr_CM_list = []
 
 
     temp = calc_xiangling(sim_atk, sim_cr, sim_cd, sim_em, sim_er)
@@ -106,12 +113,16 @@ def get_optimal(total_rolls):
     for _ in range(total_rolls):
 
 
-        atk_dmg = get_atk_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, atk_roll)
-        cr_dmg = get_cr_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, cr_roll)
-        cd_dmg = get_cd_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, cd_roll)
-        em_dmg = get_em_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, em_roll)
-        er_dmg = get_er_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, er_roll)
-        
+        atk_dmg = get_atk_roll_dmg(sim_atk, sim_cr, sim_cd, atk_roll)
+        atk_CM_list.append(roundzatk_dmg/prev_atk_dmg)
+        prev_atk_dmg = atk_dmg
+        cr_dmg = get_cr_roll_dmg(sim_atk, sim_cr, sim_cd, cr_roll)
+        cr_CM_list.append(cr_dmg/prev_cr_dmg)
+        prev_cr_dmg = cr_dmg
+        cd_dmg = get_cd_roll_dmg(sim_atk, sim_cr, sim_cd, cd_roll)
+        cd_CM_list.append(cd_dmg/prev_cd_dmg)
+        prev_cd_dmg = cd_dmg
+
         if cr_dmg > atk_dmg :
             current_best = "cr"
             temp = cr_dmg
@@ -142,6 +153,9 @@ def get_optimal(total_rolls):
     print(sim_cr)
     print(f"Max damage in sim: {temp}")
     print(get_count(sim_list))
+    print(atk_CM_list)
+    print(cd_CM_list)
+    print(cr_CM_list)
             
 def write_to_csv_cm(total_rolls, file_name):
     import csv, os
