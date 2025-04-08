@@ -1,34 +1,34 @@
-#need to add timer for buffs
+#need to add timer for buffs and vapability
+#type rotation  #calc damage for each sec then to hit  #add vap individually
 
 import damage_calculator as calc
 def calc_xiangling(atk, cr, cd, em, er_):
-    temp_dmg_ = dmg_ + er_/4
-    return calc.calc_real_damage(calc.calc_raw_damage(atk, temp_dmg_, cr, cd, skill, 0.5, em), 90, 90, res_shred, 0, 0)
+    return calc.calc_real_damage(calc.calc_raw_damage(atk, dmg_, cr, cd, skill, elemental_multiplier, em), 90, 90, res_shred, 0, 0)
     
 def get_intrinsic_stat():
-    char_base_atk = 225.14
-    ascention_ = 96
-    passive_buff = 0.15    #pyro res shred = 0.15
-    skill_ = 2.016
-    weapon_base_atk = 	510
-    weapon_secondary = 0.459
+    char_base_atk = 358.77
+    ascention_ = 0.384      #cd
+    passive_buff = 0.35    #atk
+    skill_ = ((2.304 + 5.76)*7 + 8.0064)/15
+    weapon_base_atk = 	565
+    weapon_secondary = 0.276
     weapon_passive_1 = 0.32
-    weapon_passive_2 = 0.12
-    return char_base_atk+weapon_base_atk, ascention_, passive_buff, skill_, weapon_secondary, weapon_passive_1, weapon_passive_2
+    weapon_passive_2 = 0
+    return char_base_atk+weapon_base_atk, ascention_, passive_buff, skill_, weapon_secondary, weapon_passive_1
 
 
 def update_values_from_artifact_set():
-    global er_, ele_dmg_, cr
-    er_ += 0.2
+    global atk_, ele_dmg_, cr
+    cr += 0.4
     #main
-    er_ += 0.518
+    atk_ += 0.466
     #gob
     ele_dmg_ += 0.466
     #circlet
     cr += 0.311
     #dmg_ += er/4
 
-def update_buffs(bennet= 0, kazuha= 0, xilonen= 0, candace= 0):
+def update_buffs(bennet= 0, kazuha= 0, xilonen= 0, candace= 0, furina = 0):
     global atk, atk_, dmg_, res_shred, em
     if bennet == 1:
         atk += 1045.11328
@@ -43,7 +43,49 @@ def update_buffs(bennet= 0, kazuha= 0, xilonen= 0, candace= 0):
     if candace == 1:
         dmg_ += 0.3
         em += 120
+
+    if furina:
+        dmg_ += 0.30
+        em += 160
         
+
+def gameplay_type(on_field = 0, vap = 0):
+    global g_type, elemental_multiplier
+    g_type = 0
+    if vap:
+        elemental_multiplier = 0.5
+    else:
+        elemental_multiplier = 0
+    if on_field:
+        global skill, dmg_
+        skill += ((2.176 + 2.992 + 0.0144*200+1.5)*7 - (2.304 + 5.76)*7)/15
+        dmg_ += 0.15 + 0.38
+        g_type = 1
+
+
+def cons(con):
+    if con > 0:
+        global atk_
+        atk_ += 0.40
+
+    if con > 1:
+        global base_atk
+        base_atk += 300
+        if g_type:
+            global skill
+            skill += 1.5
+        else:
+            global def_shred
+            def_shred += 0.2
+
+def is_weapon(flag = 0):
+    if flag:
+        global base_atk, dmg_, atk_, cr, cd
+        atk_ += - weapon_secondary - weapon_passive + 0.28*1.75
+        base_atk += 146
+        cr += 0.11
+        cd += 0.2*1.75
+
 def get_count(list):
     set1 = set(list)
     counted = []
@@ -52,16 +94,13 @@ def get_count(list):
     return counted
 
 def get_atk_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, atk_roll):
-
     sim_atk += atk_roll*base_atk
     current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd, sim_em, sim_er)
-
     return current_damage
 
 def get_cr_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er , cr_roll):
     sim_cr += cr_roll
     current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd, sim_em, sim_er)
-
     return current_damage
 
 def get_cd_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, cd_roll):
@@ -78,7 +117,6 @@ def get_em_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, em_roll):
 def get_er_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, er_roll):
     sim_er += er_roll
     current_damage = calc_xiangling(sim_atk, sim_cr, sim_cd, sim_em, sim_er)
-
     return current_damage
 
 
@@ -102,10 +140,7 @@ def get_optimal(total_rolls):
     cr_roll = 0.03305
 
     sim_list = []   #to hold the top stats during sim
-    prev_atk_dmg =prev_cd_dmg=prev_cr_dmg = calc_xiangling(sim_atk, sim_cr, sim_cd)
-    atk_CM_list = []
-    cd_CM_list = []
-    cr_CM_list = []
+
 
 
     temp = calc_xiangling(sim_atk, sim_cr, sim_cd, sim_em, sim_er)
@@ -113,16 +148,12 @@ def get_optimal(total_rolls):
     for _ in range(total_rolls):
 
 
-        atk_dmg = get_atk_roll_dmg(sim_atk, sim_cr, sim_cd, atk_roll)
-        atk_CM_list.append(roundzatk_dmg/prev_atk_dmg)
-        prev_atk_dmg = atk_dmg
-        cr_dmg = get_cr_roll_dmg(sim_atk, sim_cr, sim_cd, cr_roll)
-        cr_CM_list.append(cr_dmg/prev_cr_dmg)
-        prev_cr_dmg = cr_dmg
-        cd_dmg = get_cd_roll_dmg(sim_atk, sim_cr, sim_cd, cd_roll)
-        cd_CM_list.append(cd_dmg/prev_cd_dmg)
-        prev_cd_dmg = cd_dmg
-
+        atk_dmg = get_atk_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, atk_roll)
+        cr_dmg = get_cr_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, cr_roll)
+        cd_dmg = get_cd_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, cd_roll)
+        em_dmg = get_em_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, em_roll)
+        er_dmg = get_er_roll_dmg(sim_atk, sim_cr, sim_cd, sim_em, sim_er, er_roll)
+        
         if cr_dmg > atk_dmg :
             current_best = "cr"
             temp = cr_dmg
@@ -150,12 +181,10 @@ def get_optimal(total_rolls):
         else:
             sim_er += er_roll
         sim_list.append(current_best)
+    
     print(sim_cr)
-    print(f"Max damage in sim: {temp}")
+    print(f"Max damage in sim: {round(temp, 2)}")
     print(get_count(sim_list))
-    print(atk_CM_list)
-    print(cd_CM_list)
-    print(cr_CM_list)
             
 def write_to_csv_cm(total_rolls, file_name):
     import csv, os
@@ -216,25 +245,31 @@ def write_to_csv_cm(total_rolls, file_name):
         writer.writerow(['atk_dmg', 'atk_cm','cr_dmg', 'cr_cm','cd_dmg', 'cd_cm','em_dmg','em_cm','er_dmg','er_cm'])
         writer.writerows(result)
     os.startfile(file_name)
+
+def get_rotaion_damage():
+    pass #read temp
 #main
 
-base_atk, ascention, passive_buff, skill, weapon_secondary, dmg_, cr = get_intrinsic_stat()
+base_atk, ascention, passive_buff, skill, weapon_secondary, weapon_passive = get_intrinsic_stat()
 
-atk_ = 0
+atk_ = 0 + weapon_secondary + weapon_passive + passive_buff
 atk = 0
-er_ = 1 + weapon_secondary
+er_ = 1 
 em = 0 + ascention
 ele_dmg_ = 0
 burst_dmg_ = 0
-dmg_ = dmg_ + ele_dmg_ + burst_dmg_
-cr = cr + 0.05
-cd = 0.5
-res_shred = 0 + passive_buff
+dmg_ =  ele_dmg_ + burst_dmg_
+cr = 0.05
+cd = 0.5 + ascention
+res_shred = 0 
 def_shred = 0
 skill = skill
 
 update_values_from_artifact_set()
-update_buffs(bennet= 1, kazuha= 1)
+update_buffs(bennet= 0, kazuha= 1, xilonen = 1, furina = 1, candace= 0)
+gameplay_type(on_field=1, vap= 1)
+cons(con = 2)
+is_weapon(0)
 atk += calc.calc_atk(base_atk, atk_)
 get_optimal(33)
-write_to_csv_cm(40, "xiangling_stat_cumulative_increase.csv")
+#write_to_csv_cm(40, "mauvika_off_field_stat_cumulative_increase.csv")
